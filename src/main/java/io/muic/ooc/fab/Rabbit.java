@@ -11,11 +11,11 @@ public class Rabbit extends Animal {
     // The age to which a rabbit can live.
     private static final int MAX_AGE = 40;
     // The likelihood of a rabbit breeding.
-    private static final double BREEDING_PROBABILITY = 0.12;
+    //private static final double BREEDING_PROBABILITY = 0.12;
     // The maximum number of births.
     private static final int MAX_LITTER_SIZE = 4;
     // A shared random number generator to control breeding.
-    private static final Random RANDOM = new Random();
+    //private static final Random RANDOM = new Random();
 
     /**
      * Create a new rabbit. A rabbit may be created with age zero (a new born)
@@ -25,40 +25,47 @@ public class Rabbit extends Animal {
      * @param field The field currently occupied.
      * @param location The location within the field.
      */
-    public Rabbit(boolean randomAge, Field field, Location location) {
-        age = 0;
+    @Override
+    public void initialize(boolean randomAge, Field field, Location location) {
+        super.initialize(randomAge, field, location);
+        //age = 0;
         setAlive(true);
-        this.field = field;
-        setLocation(location);
-        if (randomAge) {
-            age = RANDOM.nextInt(MAX_AGE);
-        }
+//        this.field = field;
+//        setLocation(location);
+//        if (randomAge) {
+//            age = RANDOM.nextInt(MAX_AGE);
+//        }
+    }
+
+    @Override
+    protected Location moveToNewLocation() {
+        return field.freeAdjacentLocation(location);
     }
 
     /**
      * This is what the rabbit does most of the time - it runs around. Sometimes
      * it will breed or die of old age.
      *
-     * @param newRabbits A list to return newly born rabbits.
+//     * @param newRabbits A list to return newly born rabbits.
      */
-    public void run(List<Rabbit> newRabbits) {
-        incrementAge();
-        if (isAlive()) {
-            giveBirth(newRabbits);
-            // Try to move into a free location.
-            Location newLocation = field.freeAdjacentLocation(location);
-            if (newLocation != null) {
-                setLocation(newLocation);
-            } else {
-                // Overcrowding.
-                setDead();
-            }
-        }
-    }
+//    public void run(List<Rabbit> newRabbits) {
+//        incrementAge();
+//        if (isAlive()) {
+//            giveBirth(newRabbits);
+//            // Try to move into a free location.
+//            Location newLocation = moveToNewLocation();
+//            if (newLocation != null) {
+//                setLocation(newLocation);
+//            } else {
+//                // Overcrowding.
+//                setDead();
+//            }
+//        }
+//    }
 
     @Override
     protected double getBreedingProbability() {
-        return BREEDING_PROBABILITY;
+        return AnimalType.RABBIT.getBreedingProbability();
     }
 
     @Override
@@ -76,8 +83,17 @@ public class Rabbit extends Animal {
         return BREEDING_AGE;
     }
 
-    @Override
-    protected Animal createYoung(boolean randomAge, Field field, Location location) {
-        return new Rabbit(randomAge, field, location);
-    }
+//    @Override
+//    protected Animal createYoung(boolean randomAge, Field field, Location location) {
+////        Rabbit rabbit = new Rabbit();
+////        rabbit.initialize(randomAge, field, location);
+//        return AnimalFactory.createAnimal(this.getClass(), field, location);
+//    }
+
+//    @Override
+//    protected Animal breedOne(boolean randomAge, Field field, Location location) {
+////        Rabbit rabbit = new Rabbit();
+////        rabbit.initialize(randomAge, field, location);
+//        return AnimalFactory.createAnimal(this.getClass(), field, location);
+//    }
 }

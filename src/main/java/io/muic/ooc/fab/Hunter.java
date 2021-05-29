@@ -1,28 +1,28 @@
 package io.muic.ooc.fab;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
-public class Fox extends Animal {
+public class Hunter extends Animal {
     // Characteristics shared by all foxes (class variables).
 
     // The age at which a fox can start to breed.
-    private static final int BREEDING_AGE = 15;
+    private static final int BREEDING_AGE = 30;
     // The age to which a fox can live.
-    private static final int MAX_AGE = 150;
+    private static final int MAX_AGE = Integer.MAX_VALUE;
     // The likelihood of a fox breeding.
-    private static final double BREEDING_PROBABILITY = 0.08;
+    //private static final double BREEDING_PROBABILITY = 0.08;
     // The maximum number of births.
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
     //private static final int RABBIT_FOOD_VALUE = 9;
     // Random generator
-    private static final Random RANDOM = new Random();
+    //private static final Random RANDOM = new Random();
 
     // The fox's food level, which is increased by eating rabbits.
-    private int foodLevel;
+    //private int foodLevel;
 
     /**
      * Create a fox. A fox can be created as a new born (age zero and not
@@ -33,10 +33,10 @@ public class Fox extends Animal {
      * @param location The location within the field.
      */
     @Override
-    public void initialize(boolean randomAge, io.muic.ooc.fab.Field field, Location location) {
+    public void initialize(boolean randomAge, Field field, Location location) {
         setAlive(true);
         super.initialize(randomAge, field, location);
-        foodLevel = RANDOM.nextInt(AnimalType.RABBIT.getFoodValue());
+        ////foodLevel = RANDOM.nextInt(AnimalType.RABBIT.getFoodValue());
     }
 //    }(boolean randomAge, Field field, Location location) {
 //        super(randomAge, field, location);
@@ -65,7 +65,7 @@ public class Fox extends Animal {
     @Override
     public void act(List<Animal> newAnimal) {
         //incrementAge();
-        incrementHunger();
+        //incrementHunger();
         super.act(newAnimal);
 //        if (isAlive()) {
 //            giveBirth(newFoxes);
@@ -86,15 +86,12 @@ public class Fox extends Animal {
 //        }
     }
 
-    /**
-     * Make this fox more hungry. This could result in the fox's death.
-     */
-    private void incrementHunger() {
-        foodLevel--;
-        if (foodLevel <= 0) {
-            setDead();
-        }
-    }
+    //    private void incrementHunger() {
+//        foodLevel--;
+//        if (foodLevel <= 0) {
+//            setDead();
+//        }
+//    }
 
     /**
      * Look for rabbits adjacent to the current location. Only the first live
@@ -112,7 +109,21 @@ public class Fox extends Animal {
                 Rabbit rabbit = (Rabbit) animal;
                 if (rabbit.isAlive()) {
                     rabbit.setDead();
-                    foodLevel = AnimalType.RABBIT.getFoodValue();
+                    //foodLevel = AnimalType.RABBIT.getFoodValue();
+                    return where;
+                }
+            }else if (animal instanceof Fox){
+                Fox fox = (Fox) animal;
+                if (fox.isAlive()){
+                    fox.setDead();
+                    //foodLevel = AnimalType.FOX.getFoodValue();
+                    return where;
+                }
+            }else if (animal instanceof Tiger) {
+                Tiger tiger = (Tiger) animal;
+                if (tiger.isAlive()) {
+                    tiger.setDead();
+                    //foodLevel = Species.TIGER.getFoodValue();
                     return where;
                 }
             }
@@ -137,7 +148,7 @@ public class Fox extends Animal {
 
     @Override
     protected double getBreedingProbability() {
-        return AnimalType.FOX.getBreedingProbability();
+        return AnimalType.HUNTER.getBreedingProbability();
     }
 
     @Override

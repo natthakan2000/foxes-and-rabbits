@@ -16,6 +16,30 @@ public abstract class Animal {
     protected int age;
 
     private static final Random RANDOM = new Random();
+    public void initialize(boolean randomAge, Field field, Location location){
+        this.field = field;
+        setLocation(location);
+        if (randomAge){
+            age = RANDOM.nextInt(getMaxAge());
+        }
+    }
+
+    protected abstract Location moveToNewLocation();
+
+    public void act(List<Animal> newAnimal){
+        incrementAge();
+        if (isAlive()) {
+            giveBirth(newAnimal);
+            // Try to move into a free location.
+            Location newLocation = moveToNewLocation();
+            if (newLocation != null) {
+                setLocation(newLocation);
+            } else {
+                // Overcrowding.
+                setDead();
+            }
+        }
+    }
 
 
     /**
@@ -105,23 +129,27 @@ public abstract class Animal {
 
     protected abstract int getBreedingAge();
 
-    protected abstract Animal createYoung(boolean randomAge, Field field, Location location);
+    //protected abstract Animal createYoung(boolean randomAge, Field field, Location location);
 
+    private Animal breedOne(boolean randomAge, Field field, Location location){
+        return AnimalFactory.createAnimal(this.getClass(), field, location);
+    }
     /**
      * Check whether or not this rabbit is to give birth at this step. New
      * births will be made into free adjacent locations.
      *
-     * @param newRabbits A list to return newly born rabbits.
+     * @param newAnimals list to return newly born rabbits.
      */
-    protected void giveBirth(List newRabbits) {
+    protected void giveBirth(List<Animal> newAnimals) {
         // New rabbits are born into adjacent locations.
         // Get a list of adjacent free locations.
         List<Location> free = field.getFreeAdjacentLocations(location);
         int births = breed();
         for (int b = 0; b < births && free.size() > 0; b++) {
             Location loc = free.remove(0);
-            Animal young = createYoung(false, field, loc);
-            newRabbits.add(young);
+            Animal young = breedOne(false, field, loc);
+            //newAnimals.add(young);
+            newAnimals.add(young);
         }
     }
 
